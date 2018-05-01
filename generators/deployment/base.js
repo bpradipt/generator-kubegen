@@ -6,7 +6,7 @@ var val = require("../validations.js");
 module.exports = {
     write: function (fs, answers, inline = 10) {
         var deployment = {
-            apiVersion: "extensions/v1beta1",
+            apiVersion: "apps/v1",
             kind: "Deployment",
             metadata: {
                 labels: {
@@ -17,6 +17,11 @@ module.exports = {
             },
             spec: {
                 replicas: answers.replicas,
+                selector: {
+                    matchLabels: {
+                        app: answers.name
+                    }
+                },
                 template: {
                     metadata: {
                         labels: {
@@ -26,7 +31,10 @@ module.exports = {
                     spec:  {
                         containers: [{
                             name: answers.name,
-                            image: answers.image
+                            image: answers.image,
+                            imagePullPolicy: "IfNotPresent",
+                            command: answers.command,
+                            args: answers.args
                         }]
                     }
                 }
@@ -43,7 +51,7 @@ module.exports = {
             message: "(Deployment) Which Docker image should the Deployment use?",
             when: this.when,
             validate: val.isString
-        }, {
+        },{
             type: "input",
             name: "replicas",
             message: "(Deployment) How much container replicas should be created?",
@@ -51,7 +59,24 @@ module.exports = {
             validate: val.isNumber,
             when: this.when,
             filter: val.parseInteger
-        }];
+        },{
+            type: "input",
+            name: "command",
+            message: 'Specify command (in JSON format) if any. Example - ["bash"]',
+            default: "[]",
+            when: this.when,
+            validate: val.isString,   
+            filter: val.parseCommand                   
+        },{
+            type: "input",
+            name: "args",
+            message: 'Specify args (in JSON format) if any. Example - ["-c","sleep 100"]',
+            default: "[]",
+            when: this.when,
+            validate: val.isString,
+            filter: val.parseCommand                      
+        }
+    ];
 
         return prompts;
     },

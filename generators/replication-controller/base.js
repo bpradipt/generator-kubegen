@@ -27,7 +27,9 @@ module.exports = {
                         containers: [{
                             name: answers.name,
                             image: answers.image,
-                            imagePullPolicy: "Always"
+                            imagePullPolicy: "IfNotPresent",
+                            command: answers.command,
+                            args: answers.args
                         }]
                         // ,imagePullSecrets: "registryKey"
                     }
@@ -53,7 +55,24 @@ module.exports = {
             validate: val.isNumber,
             when: this.when,
             filter: val.parseInteger
-        }];
+        },{
+            type: "input",
+            name: "command",
+            message: "Specify command if any",
+            default: [],
+            when: this.when,
+            validate: val.isString,
+            filter: val.parseCommand
+        },{
+            type: "input",
+            name: "args",
+            message: "Specify args if any",
+            default: [],
+            when: this.when,
+            validate: val.isString,
+            filter: val.parseCommand
+        }
+    ];
 
         return prompts;
     },

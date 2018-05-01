@@ -9,5 +9,8 @@ module.exports = {
     },
     parseInteger(str) {
         return parseInt(str);
+    },
+    parseCommand(str) {
+        return JSON.parse(str);
     }
 }
