@@ -1,34 +1,41 @@
-# Yeoman generator for you Kubernetes boilerplate code
+# Yeoman generator for Kubernetes boilerplate code
 
-[![Build Status](https://travis-ci.org/sesispla/generator-kubegen.svg?branch=master)](https://travis-ci.org/sesispla/generator-kubegen)
-[![Coveralls](https://img.shields.io/coveralls/sesispla/generator-kubegen.svg)](https://coveralls.io/github/sesispla/generator-kubegen)
-![Version](https://img.shields.io/npm/v/generator-kubegen.svg)
-[![npm](https://img.shields.io/npm/dm/generator-kubegen.svg)](https://www.npmjs.com/package/generator-kubegen)
-
-kubegen is a tool that aims to simplify your Kubernetes day-to-day, writing the boilerplate code for you and letting you focus on the important things.
+kubegen is a tool to create boilerplate Kubernetes Deployment, Service, PVC, Ingress yamls
 
 kubegen is a [Yeoman](http://yeoman.io) generator, so you'll need to have [NodeJS](https://nodejs.org/) installed.
+
+This is based on the work done by sesispla that is available here - https://github.com/sesispla/generator-kubegen
 
 # Installation
 
 To install kubegen, you need to execute the following command:
 
 ```bash
-npm install -g generator-kubegen
+git clone https://github.com/bpradipt/generator-kubegen
+npm install -g yo
+npm install -g ./generator-kubegen
 ```
+
+For validating the generated YAMLs, you can use kubeval.
+On Mac you can install using Homebrew
+```bash
+brew tap garethr/kubeval
+brew install kubeval
+```
+For details refer to the source repository - https://github.com/garethr/kubeval
 
 # Usage
 
-Quite easy! The follwing commands are available at the moment:
+Follwing commands are available at the moment:
 
 | Command                | Description                                                                                                | Arguments                                                                |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| yo kubegen             | Starts a full Kubernetes file generation wizard. All generated files are stored in a new folder.           | --apply: Spawns a "kubectl apply -f " to all files generated immediately |
-| yo kubegen:deployment  | Starts the Deployment subgenerator. 'deployment.yml' file is created, in the current folder.               |                                                                          |
-| yo kubegen:rc          | Starts the Replication Controller subgenerator. 'rc.yml' file is created, in the current folder.           |                                                                          |
-| yo kubegen:service     | Starts the Service subgenerator. 'service.yml' file is created, in the current folder.                     |                                                                          |
-| yo kubegen:ingress     | Starts the Replication Controller subgenerator. 'deployment.yml' file is created, in the current folder.   |                                                                          |
+| yo kubegen             | Starts a full Kubernetes file generation wizard. All generated files are stored in a specified folder.     | --apply: Spawns a "kubectl apply -f " to all files generated immediately |
+| yo kubegen:deployment  | Starts the Deployment subgenerator. 'deployment.yml' file is created, in the specified folder.             |                                                                          |
+| yo kubegen:service     | Starts the Service subgenerator. 'service.yml' file is created, in the specified folder.                   |                                                                          |
+| yo kubegen:ingress     | Starts the Replication Controller subgenerator. 'deployment.yml' file is created, in the specified folder. |                                                                          |
 | yo kubegen:lego        | Starts the Let's Encrypt subgenerator. All the internal components required by a TLS Ingress with kube-lego is created by this subgen |                                               | 
+| yo kubegen:pvc         | Starts the Persistent Volume Claim subgenerator. 'pvc.yml' file is created, in the specified folder.       |                                                                          |
 
 ```bash
 yo kubegen
@@ -39,20 +46,10 @@ yo kubegen
  |  .  \  |  `--'  | |  |_)  | |  |____ |  |__| | |  |____ |  |\   |
  |__|\__\  \______/  |______/  |_______| \______| |_______||__| \__|
 
-Welcome to Kubernetes Generator (kubegen)!
-? How the service should be named? nginx
-? In which Namespace should be deployed? default
-? Which type of Pod controller mechanism whould you like to use? Replication Controller
-? (Replication Controller) Which Docker image should the Deployment use? nginx
-? (Replication Controller) How much container replicas should be created? 1
-? (Service) In which port is the Container listening? 80
-? (Service) In which port should the Service listen? 80
-? (Ingress) Would like to expose the service out of the cluster? yes
-? (Ingress) Which class of expose would you like?
-❯ external
-  internal
-  nginx
-  tls-lego
+Welcome to Kubernetes Generator (kubegen)!. Generate Deployment/Service/PVC/Ingress YAMLs
+Validate the generated YAML schema using kubeval - https://github.com/garethr/kubeval
+
+? Directory to store the YAML? (app-demo)
 ```
 
 # Contributing
