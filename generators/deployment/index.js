@@ -2,7 +2,7 @@
 
 var Generator = require("yeoman-generator");
 var common = require("../app/base.js");
-var deployment = require("./base.js");
+var deploymentAll = require("./base.js");
 
 
 module.exports = class extends Generator {
@@ -17,7 +17,7 @@ module.exports = class extends Generator {
 
     prompting() {
         var prompts = common.getPrompts()
-            .concat(deployment.getPrompts());
+            .concat(deploymentAll.getPrompts());
 
         return this.prompt(prompts).then((answers) => {
             this.answers = answers;
@@ -29,7 +29,7 @@ module.exports = class extends Generator {
     default () {}
 
     writing() {
-        deployment.write(this.fs, this.answers);
+        deploymentAll.write(this.fs, this.answers);
     }
 
     conflicts() {}

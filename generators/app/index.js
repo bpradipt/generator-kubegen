@@ -3,12 +3,9 @@
 var Generator = require("yeoman-generator");
 var common = require("./base.js");
 var ingress = require("../ingress/base.js");
-var deployment = require("../deployment/base.js");
-var deploymentres = require("../deployment-resources/base.js");
-var deploymentGpuICP = require("../deployment-gpus-icp/base.js");
-var deploymentNodeSel = require("../deployment-nodeselector/base.js");
-var rc = require("../replication-controller/base.js");
+var deploymentAll = require("../deployment/base.js");
 var service = require("../service/base.js");
+var pvc = require("../pvc/base.js");
 
 module.exports = class extends Generator {
 
@@ -22,27 +19,22 @@ module.exports = class extends Generator {
     }
 
     prompting() {
-
-        var prompts = common.getPrompts()
-            .concat([{
-                name: "podControllerType",
-                type: "list",
-                message: "Which type of Pod controller mechanism whould you like to use?",
-                choices: ["Deployment", "Deployment with Resources",
-                          "GPU Deployment for IBM Cloud Private", "Deployment with NodeSelector",
-                          "Replication Controller", "Other"]
-            }])
-            .concat(deployment.getPrompts())
-            .concat(deploymentres.getPrompts())
-            .concat(deploymentGpuICP.getPrompts())
-            .concat(deploymentNodeSel.getPrompts())
-            .concat(rc.getPrompts())
-            .concat(service.getPrompts())
-        .concat(ingress.getPrompts());
+      var prompts = common.getPrompts()
+                    .concat(deploymentAll.getPrompts())
+                    .concat(pvc.getPrompts())
+                    .concat(service.getPrompts())
+                    .concat(ingress.getPrompts());
 
         return this.prompt(prompts).then((answers) => {
             this.answers = answers;
+            answers.createDeploy = answers.createDeploy === "yes";
+            answers.createSVC = answers.createSVC === "yes";
             answers.shouldExpose = answers.shouldExpose === "yes";
+            answers.createPVC = answers.createPVC === "yes";
+            answers.usePVC = answers.usePVC === "yes";
+            answers.needCommand = answers.needCommand === "yes";
+            answers.resourceLimits = answers.resourceLimits === "yes";
+            answers.useNodeSelector = answers.useNodeSelector === "yes";
         });
     }
 
@@ -51,31 +43,18 @@ module.exports = class extends Generator {
     default () {}
 
     writing() {
-        this.destinationRoot("./" + this.answers.name);
-        switch (this.answers.podControllerType) {
-            case "Deployment":
-                deployment.write(this.fs, this.answers);
-                break;
-            case "Deployment with Resources":
-                deploymentres.write(this.fs, this.answers);
-                break;
-            case "GPU Deployment for IBM Cloud Private":
-                deploymentGpuICP.write(this.fs, this.answers);
-                break;
-            case "Deployment with NodeSelector":
-                deploymentNodeSel.write(this.fs, this.answers);
-                break;
-            case "Replication Controller":
-                rc.write(this.fs, this.answers);
-                break;
-            default:
-                this.log("Not supported yet!");
-                return;
+        this.destinationRoot("./" + this.answers.dirName);
+        if (this.answers.createDeploy) {
+            deploymentAll.write(this.fs, this.answers);
         }
-
-        service.write(this.fs, this.answers);
+        if (this.answers.createSVC) {
+            service.write(this.fs, this.answers);
+        }
         if (this.answers.shouldExpose) {
             ingress.write(this.fs, this.answers);
+        }
+        if (this.answers.createPVC) {
+            pvc.write(this.fs, this.answers);
         }
     }
 

@@ -9,7 +9,7 @@ module.exports = {
             apiVersion: "extensions/v1beta1",
             kind: "Ingress",
             metadata: {
-                name: answers.name,
+                name: answers.svcName,
                 namespace: answers.namespace,
                 annotations: {
 
@@ -21,7 +21,7 @@ module.exports = {
                         paths: [{
                             path: answers.path,
                             backend: {
-                                serviceName: answers.name,
+                                serviceName: answers.svcName,
                                 servicePort: answers.ingressPort
                             }
                         }]
@@ -58,14 +58,15 @@ module.exports = {
         var prompts = [{
             name: "shouldExpose",
             type: "list",
-            message: "(Ingress) Would like to expose the service out of the cluster?",
-            choices: ["yes", "no"]
+            message: "Would like to create Ingress resource?",
+            choices: ["no", "yes"]
         }, {
             name: "ingressType",
             type: "list",
             message: "(Ingress) Which class of expose would you like?",
             choices: ["external", "internal", "nginx", "tls-lego"],
-            default: "external"
+            default: "external",
+            when: this.when.shouldExpose
         }, {
             name: "host",
             type: "input",
