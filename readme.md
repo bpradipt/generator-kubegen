@@ -6,14 +6,25 @@ kubegen is a [Yeoman](http://yeoman.io) generator, so you'll need to have [NodeJ
 
 This is based on the work done by sesispla that is available here - https://github.com/sesispla/generator-kubegen
 
+# Pre-requisite
+Ensure recent version of Node is installed. The version of Node in Ubuntu is pretty old.
+
+```bash
+sudo apt-get install python-software-properties
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+```
+
+Detailed instructions mentioned in the following link for installing recent versions of Node on Ubuntu:
+[Install latest Node on Ubuntu](https://tecadmin.net/install-latest-nodejs-npm-on-ubuntu/)
+
 # Installation
 
 To install kubegen, you need to execute the following command:
 
 ```bash
 git clone https://github.com/bpradipt/generator-kubegen
-npm install -g yo
-npm install -g ./generator-kubegen
+sudo npm install -g yo
+sudo npm install -g ./generator-kubegen
 ```
 
 For validating the generated YAMLs, you can use kubeval.
@@ -38,7 +49,7 @@ Follwing commands are available at the moment:
 | yo kubegen:pvc         | Starts the Persistent Volume Claim subgenerator. 'pvc.yml' file is created, in the specified folder.       |                                                                          |
 
 ```bash
-yo kubegen
+$ yo kubegen
 
  |  |/  / |  |  |  | |   _  \  |   ____| /  _____||   ____||  \ |  |
  |  '  /  |  |  |  | |  |_)  | |  |__   |  |  __  |  |__   |   \|  |
@@ -51,6 +62,8 @@ Validate the generated YAML schema using kubeval - https://github.com/garethr/ku
 
 ? Directory to store the YAML? (app-demo)
 ```
+
+**Note:** You'll need to run it as a non-root user
 
 # Contributing
 
