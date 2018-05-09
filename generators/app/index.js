@@ -6,6 +6,7 @@ var ingress = require("../ingress/base.js");
 var deploymentAll = require("../deployment/base.js");
 var service = require("../service/base.js");
 var pvc = require("../pvc/base.js");
+var job = require("../job/base.js");
 
 module.exports = class extends Generator {
 
@@ -21,6 +22,7 @@ module.exports = class extends Generator {
     prompting() {
       var prompts = common.getPrompts()
                     .concat(deploymentAll.getPrompts())
+                    .concat(job.getPrompts())
                     .concat(pvc.getPrompts())
                     .concat(service.getPrompts())
                     .concat(ingress.getPrompts());
@@ -28,6 +30,7 @@ module.exports = class extends Generator {
         return this.prompt(prompts).then((answers) => {
             this.answers = answers;
             answers.createDeploy = answers.createDeploy === "yes";
+            answers.createJob = answers.createJob === "yes";
             answers.createSVC = answers.createSVC === "yes";
             answers.shouldExpose = answers.shouldExpose === "yes";
             answers.createPVC = answers.createPVC === "yes";
@@ -46,6 +49,9 @@ module.exports = class extends Generator {
         this.destinationRoot("./" + this.answers.dirName);
         if (this.answers.createDeploy) {
             deploymentAll.write(this.fs, this.answers);
+        }
+        if (this.answers.createJob) {
+            job.write(this.fs, this.answers);
         }
         if (this.answers.createSVC) {
             service.write(this.fs, this.answers);
