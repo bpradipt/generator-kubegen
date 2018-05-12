@@ -7,15 +7,19 @@ kubegen is a [Yeoman](http://yeoman.io) generator, so you'll need to have [NodeJ
 This is based on the work done by sesispla that is available here - https://github.com/sesispla/generator-kubegen
 
 # Pre-requisite
-Ensure recent version of Node is installed. The version of Node in Ubuntu is pretty old.
+Ensure recent version of Node (>=8.11.1) is installed. The version of Node in Ubuntu is pretty old.<br>
+The program has been tested on Mac and Linux only
 
 ```bash
 sudo apt-get install python-software-properties
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 ```
 
-Detailed instructions mentioned in the following link for installing recent versions of Node on Ubuntu:
+Detailed instructions mentioned in the following link for installing recent versions of Node on Ubuntu:<br>
 [Install latest Node on Ubuntu](https://tecadmin.net/install-latest-nodejs-npm-on-ubuntu/)
+
+For Power LE (ppc64le) platform, you'll need to download Node binaries from the following [link](https://nodejs.org/en/download/) <br>
+and following the instructions mentioned [here](https://github.com/nodejs/help/wiki/Installation)
 
 # Installation
 
