@@ -1,11 +1,21 @@
 "use strict";
 
 const fs = require("fs");
+const semver = require('semver');
 const val = require("../validations.js");
 
 module.exports = {
-
     initializing(generator) {
+        if (semver.lt(semver.clean(process.version),'8.11.1')) {
+            generator.log("Node version " + semver.clean(process.version));
+            generator.log("Need atleast Node version 8.11.1");
+            process.exit(1);
+        }
+
+        if (! ['linux','darwin'].includes(process.platform.trim())) {
+            generator.log("Supported/Tested on only darwin and linux platforms");
+            process.exit(1);
+        }
         generator.log(" ");
         generator.log(" |  |/  / |  |  |  | |   _  \\  |   ____| /  _____||   ____||  \\ |  | ");
         generator.log(" |  '  /  |  |  |  | |  |_)  | |  |__   |  |  __  |  |__   |   \\|  | ");

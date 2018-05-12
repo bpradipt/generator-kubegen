@@ -7,11 +7,18 @@
     "test": "mocha ./tests/*.js",
     "cover": "istanbul cover _mocha ./tests/*.js",
     "codacy-cover": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage",
-    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
+    "os": [
+      "darwin",
+      "linux"
+    ]
+  },
+  "engines": {
+    "node": ">8.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sesispla/generator-kubegen.git"
+    "url": "git+https://github.com/bpradipt/generator-kubegen.git"
   },
   "keywords": [
     "kubernetes",
