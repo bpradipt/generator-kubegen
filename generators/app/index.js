@@ -13,6 +13,7 @@ module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
         this.argument("apply", { required: false });
+        this.argument("validate", { required: false });
     }
 
     initializing() {
@@ -70,6 +71,10 @@ module.exports = class extends Generator {
     install() {
         if (this.options.apply) {
             common.spawnKubectlCommand(this, this.destinationRoot(), "apply");
+        }
+        
+        if (this.options.validate) {
+            common.spawnKubevalCommand(this, this.destinationRoot(), "1.9.3");
         }
     }
 

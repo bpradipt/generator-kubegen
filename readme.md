@@ -46,6 +46,7 @@ Follwing commands are available at the moment:
 | Command                | Description                                                                                                | Arguments                                                                |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | yo kubegen             | Starts a full Kubernetes file generation wizard. All generated files are stored in a specified folder.     | --apply: Spawns a "kubectl apply -f " to all files generated immediately |
+| yo kubegen             | Starts a full Kubernetes file generation wizard. All generated files are stored in a specified folder.     | --validate: Spawns a "kubeval -v 1.9.3 <file.yaml>" to all files generated immediately |
 | yo kubegen:deployment  | Starts the Deployment subgenerator. 'deployment.yml' file is created, in the specified folder.             |                                                                          |
 | yo kubegen:service     | Starts the Service subgenerator. 'service.yml' file is created, in the specified folder.                   |                                                                          |
 | yo kubegen:ingress     | Starts the Replication Controller subgenerator. 'deployment.yml' file is created, in the specified folder. |                                                                          |

@@ -41,5 +41,15 @@ module.exports = {
 
     spawnKubectlCommand(generator, fileOrFolder, command) {
         generator.spawnCommandSync("kubectl",[command, "-f", fileOrFolder]);
+    },
+    
+    spawnKubevalCommand(generator, folder, k8sVer) {
+        var files = fs.readdirSync(folder);
+        console.log("YAMLs to validate: %s", files);
+        for (var i=0; i < files.length; i++) {
+            console.log("file: %s", files[i]);
+            generator.spawnCommandSync("kubeval",["-v", k8sVer, files[i]]);
+        }
     }
+
 };
