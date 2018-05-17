@@ -68,7 +68,7 @@ module.exports = {
             name: "createJob",
             type: "list",
             message: "Create Job YAML?",
-            choices: ["yes", "no"]
+            choices: ["no", "yes"]
         },{
             type: "input",
             name: "jobName",
@@ -144,7 +144,7 @@ module.exports = {
             type: "input",
             message: "(Job) Storage Class Name",
             validate: val.isString,
-            when: this.when.usePVC
+            when: this.when.createJob && this.when.usePVC
         },{
             name: "pvcName",
             type: "input",
