@@ -35,6 +35,7 @@ module.exports = class extends Generator {
             answers.shouldExpose = answers.shouldExpose === "yes";
             answers.createPVC = answers.createPVC === "yes";
             answers.usePVC = answers.usePVC === "yes";
+            answers.useHostPath = answers.useHostPath === "yes";
             answers.needCommand = answers.needCommand === "yes";
             answers.resourceLimits = answers.resourceLimits === "yes";
             answers.useNodeSelector = answers.useNodeSelector === "yes";

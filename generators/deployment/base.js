@@ -53,6 +53,20 @@ module.exports = {
             }];
         }
 
+        if (answers.useHostPath) {
+            deploymentAll.spec.template.spec.volumes = [{
+                name: answers.volumeName,
+                hostPath: {
+                    path: answers.hpLocation,
+                    type: answers.hpType
+                }
+            }];
+            deploymentAll.spec.template.spec.containers[0].volumeMounts = [ {
+                mountPath: answers.mountPath,
+                name: answers.volumeName
+            }];
+        }
+
         if (answers.resourceLimits) {
             deploymentAll.spec.template.spec.containers[0].resources = {
                     requests: answers.requests,
@@ -197,11 +211,39 @@ module.exports = {
             when: this.when.usePVC,
             validate: val.isString
         },{
-            name: "useNodeSelector",
+            name: "useHostPath",
             type: "list",
-            message: "(Deployment) Want to use Node Selector?",
+            message: "(Deployment) Want to use HostPath?",
             when: this.when.createDeploy,
             choices: ["no","yes"]
+        },{
+            type: "input",
+            name: "volumeName",
+            message: '(Deployment) Specify Volume Name. Example - host-volume',
+            default: "host-volume",
+            when: this.when.useHostPath,
+            validate: val.isString
+        },{
+            name: "hpLocation",
+            type: "input",
+            message: "(Deployment) Host Path",
+            default: "/tmp/something",
+            validate: val.isString,
+            when: this.when.useHostPath
+        },{
+            name: "hpType",
+            type: "input",
+            message: "(Deployment) Type of Host Path [DirectoryOrCreate, Directory, FileOrCreate, File etc]",
+            default: "File",
+            validate: val.isString,
+            when: this.when.useHostPath
+        },{
+            type: "input",
+            name: "mountPath",
+            message: '(Deployment) Specify mount path. Example - /usr/share/nginx/html',
+            default: "/tmp/something",
+            when: this.when.useHostPath,
+            validate: val.isString
         },{
             type: "input",
             name: "nodeselector",
@@ -231,6 +273,9 @@ module.exports = {
         },
         resourceLimits(answers) {
             return answers.resourceLimits === "yes";
+        },
+        useHostPath(answers) {
+            return answers.useHostPath === "yes";
         }
     }
 }
