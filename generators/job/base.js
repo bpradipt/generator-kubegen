@@ -10,7 +10,7 @@ module.exports = {
             kind: "Job",
             metadata: {
                 name: answers.jobName,
-                namespace: answers.namespace
+                namespace: answers.jnamespace
             },
             spec:{
                 template: {
@@ -20,7 +20,7 @@ module.exports = {
                     spec:  {
                         containers: [{
                             name: answers.jobName,
-                            image: answers.image,
+                            image: answers.jimage,
                             imagePullPolicy: "IfNotPresent"
                             
                         }],
@@ -31,33 +31,33 @@ module.exports = {
             }
         };
 
-        if (answers.usePVC) {
+        if (answers.jusePVC) {
             job.spec.template.spec.volumes = [{
-                name: answers.volumeName,
+                name: answers.jvolumeName,
                 persistentVolumeClaim: {
-                    claimName: answers.pvcName
+                    claimName: answers.jpvcName
                 }
             }];
             job.spec.template.spec.containers[0].volumeMounts = [ {
-                mountPath: answers.mountPath,
-                name: answers.volumeName
+                mountPath: answers.jmountPath,
+                name: answers.jvolumeName
             }];
         }
 
-        if (answers.resourceLimits) {
+        if (answers.jresourceLimits) {
             job.spec.template.spec.containers[0].resources = {
-                    requests: answers.requests,
-                    limits: answers.limits                
+                    requests: answers.jrequests,
+                    limits: answers.jlimits                
             };
         }
 
-        if (answers.needCommand) {
-            job.spec.template.spec.containers[0].command = answers.command;
-            job.spec.template.spec.containers[0].args = answers.args;                            
+        if (answers.jneedCommand) {
+            job.spec.template.spec.containers[0].command = answers.jcommand;
+            job.spec.template.spec.containers[0].args = answers.jargs;                            
         }
 
-        if (answers.useNodeSelector) {
-            job.spec.template.spec.nodeSelector = answers.nodeselector;
+        if (answers.juseNodeSelector) {
+            job.spec.template.spec.nodeSelector = answers.jnodeselector;
         }
 
         var yamlContent = yaml.stringify(job, inline);
@@ -78,119 +78,119 @@ module.exports = {
             when: this.when.createJob
         },{
             type: "input",
-            name: "namespace",
+            name: "jnamespace",
             message: "(Job)In which Namespace should be deployed?",
             default: "default",
             when: this.when.createJob,
             validate: val.isString
         },{
             type: "input",
-            name: "image",
+            name: "jimage",
             message: "(Job) Which Docker image to use?",
             when: this.when.createJob,
             validate: val.isString
         },{
-            name: "needCommand",
+            name: "jneedCommand",
             type: "list",
             message: "(Job) Want to specify Command and Args?",
             when: this.when.createJob,
             choices: ["no","yes"]
         },{
             type: "input",
-            name: "command",
+            name: "jcommand",
             message: '(Job) Specify command in JSON format. Example - ["bash"]',
             default: "[]",
-            when: this.when.needCommand,
+            when: this.when.jneedCommand,
             validate: val.isString,
             filter: val.parseCommand
         },{
             type: "input",
-            name: "args",
+            name: "jargs",
             message: '(Job) Specify args in JSON format. Example - ["-c","sleep 100"]',
             default: "[]",
-            when: this.when.needCommand,
+            when: this.when.jneedCommand,
             validate: val.isString,
             filter: val.parseCommand
         },{
-            name: "resourceLimits",
+            name: "jresourceLimits",
             type: "list",
             message: "(Job) Want to specify resource requests & limits?",
             when: this.when.createJob,
             choices: ["no","yes"]
         },{
             type: "input",
-            name: "requests",
+            name: "jrequests",
             message: '(Job) Specify resource requests in JSON format. Example - {"cpu":"10m","memory":"500Mi","alpha.kubernetes.io/nvidia-gpu": 1}',
             default: "{}",
-            when: this.when.resourceLimits,
+            when: this.when.jresourceLimits,
             validate: val.isString,
             filter: val.parseCommand
         },{
             type: "input",
-            name: "limits",
+            name: "jlimits",
             message: '(Job) Specify resource limits in JSON format. Example - {"cpu":"10m","memory":"500Mi","alpha.kubernetes.io/nvidia-gpu": 1}',
             default: "{}",
-            when: this.when.resourceLimits,
+            when: this.when.createJob && this.when.jresourceLimits,
             validate: val.isString,
             filter: val.parseCommand
         },{
-            name: "usePVC",
+            name: "jusePVC",
             type: "list",
             message: "(Job) Want to use Persistent Volume Claims?",
             when: this.when.createJob,
             choices: ["no","yes"]
         },{
-            name: "scName",
+            name: "jscName",
             type: "input",
             message: "(Job) Storage Class Name",
             validate: val.isString,
-            when: this.when.createJob && this.when.usePVC
+            when: this.when.jusePVC
         },{
-            name: "pvcName",
+            name: "jpvcName",
             type: "input",
             message: "(Job) Persistent Volume Claim Name. Example - pv-claim",
             validate: val.isString,
-            when: this.when.usePVC
+            when: this.when.jusePVC
         },{
             type: "input",
-            name: "volumeName",
+            name: "jvolumeName",
             message: '(Job) Specify Volume Name. Example - pv-storage',
             default: "",
-            when: this.when.usePVC,
+            when: this.when.jusePVC,
             validate: val.isString
         },{
-            name: "accessModes",
+            name: "jaccessModes",
             type: "input",
             message: "(Job) Access Modes. Example - ReadWriteOnce",
             default: "ReadWriteOnce",
             validate: val.isString,
-            when: this.when.usePVC
+            when: this.when.jusePVC
         },{
-            name: "storageSize",
+            name: "jstorageSize",
             type: "input",
             message: "(Job) Specify storage size. Example - 2Gi",
             default: "1Gi",
             validate: val.isString,
-            when: this.when.usePVC
+            when: this.when.jusePVC
         },{
             type: "input",
-            name: "mountPath",
+            name: "jmountPath",
             message: '(Job) Specify mount path. Example - /usr/share/nginx/html',
             default: "/",
-            when: this.when.usePVC,
+            when: this.when.jusePVC,
             validate: val.isString
         },{
-            name: "useNodeSelector",
+            name: "juseNodeSelector",
             type: "list",
             message: "(Job) Want to use Node Selector?",
             when: this.when.createJob,
             choices: ["no","yes"]
         },{
             type: "input",
-            name: "nodeselector",
+            name: "jnodeselector",
             message: '(Job) Specify Node Selector in JSON format. Example - {"beta.kubernetes.io/arch":"ppc64le"}',
             default: "{}",
-            when: this.when.useNodeSelector,
+            when: this.when.juseNodeSelector,
             validate: val.isString,
             filter: val.parseCommand
         }
@@ -203,17 +203,17 @@ module.exports = {
         createJob(answers) {
             return answers.createJob === "yes";
         },
-        usePVC(answers) {
-            return answers.usePVC === "yes";
+        jusePVC(answers) {
+            return answers.jusePVC === "yes";
         },
-        useNodeSelector(answers) {
-            return answers.useNodeSelector === "yes";
+        juseNodeSelector(answers) {
+            return answers.juseNodeSelector === "yes";
         },
-        needCommand(answers) {
-            return answers.needCommand === "yes";
+        jneedCommand(answers) {
+            return answers.jneedCommand === "yes";
         },
-        resourceLimits(answers) {
-            return answers.resourceLimits === "yes";
+        jresourceLimits(answers) {
+            return answers.jresourceLimits === "yes";
         }
     }
 }

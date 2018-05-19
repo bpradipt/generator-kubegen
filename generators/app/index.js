@@ -35,11 +35,15 @@ module.exports = class extends Generator {
             answers.createSVC = answers.createSVC === "yes";
             answers.shouldExpose = answers.shouldExpose === "yes";
             answers.createPVC = answers.createPVC === "yes";
-            answers.usePVC = answers.usePVC === "yes";
+            answers.usePVC = answers.usePVC === "yes";            
             answers.useHostPath = answers.useHostPath === "yes";
             answers.needCommand = answers.needCommand === "yes";
             answers.resourceLimits = answers.resourceLimits === "yes";
             answers.useNodeSelector = answers.useNodeSelector === "yes";
+            answers.jusePVC = answers.jusePVC === "yes";
+            answers.jneedCommand = answers.jneedCommand === "yes";
+            answers.jresourceLimits = answers.jresourceLimits === "yes";
+            
         });
     }
 

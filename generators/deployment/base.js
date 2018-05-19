@@ -55,15 +55,15 @@ module.exports = {
 
         if (answers.useHostPath) {
             deploymentAll.spec.template.spec.volumes = [{
-                name: answers.volumeName,
+                name: answers.hpVolumeName,
                 hostPath: {
                     path: answers.hpLocation,
                     type: answers.hpType
                 }
             }];
             deploymentAll.spec.template.spec.containers[0].volumeMounts = [ {
-                mountPath: answers.mountPath,
-                name: answers.volumeName
+                mountPath: answers.hpMountPath,
+                name: answers.hpVolumeName
             }];
         }
 
@@ -218,7 +218,7 @@ module.exports = {
             choices: ["no","yes"]
         },{
             type: "input",
-            name: "volumeName",
+            name: "hpVolumeName",
             message: '(Deployment) Specify Volume Name. Example - host-volume',
             default: "host-volume",
             when: this.when.useHostPath,
@@ -239,11 +239,17 @@ module.exports = {
             when: this.when.useHostPath
         },{
             type: "input",
-            name: "mountPath",
+            name: "hpMountPath",
             message: '(Deployment) Specify mount path. Example - /usr/share/nginx/html',
             default: "/tmp/something",
             when: this.when.useHostPath,
             validate: val.isString
+        },{
+            name: "useNodeSelector",
+            type: "list",
+            message: "(Deployment) Want to use Node Selector?",
+            when: this.when.createDeploy,
+            choices: ["no","yes"]
         },{
             type: "input",
             name: "nodeselector",
