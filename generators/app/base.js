@@ -23,7 +23,7 @@ module.exports = {
         generator.log(" |  .  \\  |  `--'  | |  |_)  | |  |____ |  |__| | |  |____ |  |\\   | ");
         generator.log(" |__|\\__\\  \\______/  |______/  |_______| \\______| |_______||__| \\__| ");
         generator.log(" ");
-        generator.log("Welcome to Kubernetes Generator (kubegen)!. Generate Deployment/Job/Service/PVC/Ingress YAMLs");
+        generator.log("Welcome to Kubernetes Generator (kubegen)!. Generate Deployment/Daemonset/Job/Service/PVC/Ingress YAMLs");
         generator.log("Validate the generated YAML schema using kubeval - https://github.com/garethr/kubeval\n\n");
     },
 

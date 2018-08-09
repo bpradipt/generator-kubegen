@@ -7,6 +7,7 @@ var deploymentAll = require("../deployment/base.js");
 var service = require("../service/base.js");
 var pvc = require("../pvc/base.js");
 var job = require("../job/base.js");
+var daemonsetAll = require("../daemonset/base.js");
 
 module.exports = class extends Generator {
 
@@ -23,6 +24,7 @@ module.exports = class extends Generator {
     prompting() {
       var prompts = common.getPrompts()
                     .concat(deploymentAll.getPrompts())
+                    .concat(daemonsetAll.getPrompts())
                     .concat(job.getPrompts())
                     .concat(pvc.getPrompts())
                     .concat(service.getPrompts())
@@ -31,6 +33,7 @@ module.exports = class extends Generator {
         return this.prompt(prompts).then((answers) => {
             this.answers = answers;
             answers.createDeploy = answers.createDeploy === "yes";
+            answers.createDaemonset = answers.createDaemonset === "yes";
             answers.createJob = answers.createJob === "yes";
             answers.createSVC = answers.createSVC === "yes";
             answers.shouldExpose = answers.shouldExpose === "yes";
@@ -67,6 +70,9 @@ module.exports = class extends Generator {
         }
         if (this.answers.createPVC) {
             pvc.write(this.fs, this.answers);
+        }
+        if (this.answers.createDaemonset) {
+            daemonsetAll.write(this.fs, this.answers);
         }
     }
 
